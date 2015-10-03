@@ -1,0 +1,67 @@
+Linking:
+	.C 	--> 	[Preprocessor 	--> 	.s 		--> 	[Assembler 		--> 	.exe
+				& Compiler]								& (Linker)]
+				
+	.C	-->		[Translation]		--> 	.exe
+				("Black Box")
+				
+test .C	-->		[Preprocessor]	-->		[Compiler]	-->		.s			-->		[Assembler]		-->		.o 		-->		[Linker]	-->		.exe
+stdlib .C		-->		-->		-->		-->		-->		-->		-->		-->		-->		-->		-->		-->		-->		--^
+	
+	extern int e;, external int declaration
+	return 2*e;, will not be able to see e.
+	
+	Resolving external references
+	m.c									a.c
+	int e = 7;							extern e;
+	int main()							int *ep = &e;
+	{									int x = 15
+		int r = q();					int y;
+		exit(0);						int a(){
+	}										return(*ep + x + y);}
+	
+		<main>: 00000000<main>
+	0: 55					pushl
+	1: 89e5					movel
+	3: e8 fc ff ff ff		call 4<main + 0x04>
+							4: R_386_PC32 a			<-- a is the Name of symbol, PC32 is for when the symbol is relative (PC usually functions), which is that it doesn't have a constant single address, but depend on when it's called
+	...						...
+		.data
+		<e>: 83 f3 21 01
+		07 00 00 00
+		
+	Linker:
+		Looks at .o files, combines them, finds absolute function address and size, then uses offsets to find out where the parts of the function are.
+		This allows the linker to no require exact address, except for the function's absolute address.
+		
+	
+TLB:
+	0x3de
+	[ 0	| 0	| 1	| 1	| 1	| 1	| 0	| 1	| 1	| 1	| 1	| 0	]
+	11	|		VPN			|	Page Offset			0
+		|			page size = 64 bytes
+		|
+		v	Page Table
+	valid	|	Access	|	PPN
+	--------+-----------+-------
+			|			|
+			|			|	0x3
+							
+	TBL is cache for the page table.						
+	ex: TBL has 8 entries and 2 way set associative (4 sets for eight entries). Each index has 2 tags and Phy pg num
+	Index	|	Tag		|	PPN
+	--------+-----------+--------
+	0		|			|
+			|			|
+	1		|			|
+			|			|
+	2		|			|
+			|			|
+	3		|	0x3		|	0xd
+			|			|
+	
+	Looking for data:
+	-->	1. TLB	-hit->	2. Cache	-hit->	3.Done
+			|					\___miss_>	Memory
+			\---Miss->		PT	-->
+							\----->

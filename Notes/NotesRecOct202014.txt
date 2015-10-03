@@ -1,0 +1,43 @@
+Pipelining
+	-NOT PARALLEL PROCESSING
+	Think of it like an assembly line, breaking processes into multiple stages
+
+	movl src, dest		# note
+			(%ebp),
+			
+	Arithmatic Logic Unit		
+			|\   0
+			| \  |
+			|  \ |
+		X---|   \|
+			|    \
+			|	  |
+			|	A |
+			|	L |---Z = X+Y
+			|	U |
+			|	  |
+			|    /
+		Y---|   /|
+			|  / |
+			| /  |
+			|/   CLOCK
+	Clock Cycle	
+		|		|		|
+		|---|	|---|	|---|
+		|	|	|	|	|	|
+		|	|---|	|---|	|----Cycle 3, shorter the cycle = faster the process
+		|	  |	|	  |	|
+			 t_0	 t_1
+		[	1	][	2	][	3	] <-- Processes running in the cycle.
+				 [	1	][	2	] <-- Prefetched processes
+						 [	1	]
+		What if a jump occurs? The prefetched process is flushed out? No, both condition processes are fetched.
+	See pictures for pipeline diagram.
+	
+	1Byte
+					|
+			|		|
+	[	|	|rA	|rB	|	|	|	|	]
+	^	^	|		|
+	|	\-----|		|
+	icode	ifun

@@ -1,0 +1,50 @@
+Virtual Memory:
+	Virtual Address Space				Physical Address Space
+	[-------------------]				[		...			]			MEM MAX
+	[-------------------]	Address				...
+	[	Stack			]	Trans				...
+	[-------------------]		|				...
+	[	Heap			]		|				...
+	[-------------------]		|		[-------------------]
+	[	Data			]		|		[	Code			
+	[-------------------]		|
+	[-------------------]		|
+	[	Code			]-------+------>					]
+	[-------------------]		|		[-------------------]			MEM MIN
+	Disassembled code show Virtual Addresses in the virtual mem, which translates to Physical Addresses in the physical mem.
+	
+	
+	Virtual Memory			Phys
+	[			]			[			]
+	[			]			[			]
+	[			]			[	CODE	]
+	[			]			[ 9|10|11|12]
+	[ 5| 6|..|..]			[			]
+	[ 1| 2| 3| 4]			[ 5| 6| 7| 8]
+	Page Table
+	[	VALID		|	ACCESS			|	 Virtual Page	|	Physical Page	]
+	|		0		|					|		1			|		11			|
+												3					12
+												7					8
+	...
+	ONE PAGE TABLE FOR EACH PROCESS! Contains  info about process
+			
+								/-------------------------------\
+	[ PT BASE REG ]		[ VIRTUAL PG NO	|	PAGE OFFSET-]-------+---\
+			|			n			   p, p-1			0		|	|
+			|													|	|
+			\---------->[ VALID | ACCESS 	| PHYS PG NUM	]	|	|
+	[MAIN MEM]<---------[---1	|			|				]	|	|
+						[		|			|	[.]			]	|	|
+	[HARD DISK]<--------[-[0]<--|-----------|----+----------]---/	|
+						[		|			|	 |			]		|
+								 /---------------/					|
+								 |									|
+						n		 v	  p, p-1			0			|
+						[ PHYS PG NO	|	PAGE OFFSET<]-----------/
+						
+	0 is a page miss, having to go to the hard drive.
+	1 is a page hit, accessing main mem.
+	
+	IF there is no space in the main mem, data is moved into the hard disk
+		ex: no main mem for 1, means swap space, which means 1 is moved to hard disk and valid is changed to 0.

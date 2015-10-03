@@ -1,0 +1,71 @@
+CODE OPTIMIZATION
+	[ ][ ][ ][ ][ ][ ]		[ ][ ][ ][		]
+	[ ][/][ ][ ][ ][ ]		[ ][/][ ][		]
+	[ ][ ][ ][ ][ ][ ]	=>	[ ][ ][ ][
+	[ ][ ][ ][ ][ ][ ]		[ ][ ][ ]
+	[ ][ ][ ][ ][ ][ ]		[ ][ ][ ]		]
+	Image					Transformation
+	
+	RGB Grid, each square is a pixel
+	There are 3 writing layers, 3 loops, for R, then G, then B
+	
+Looping Unrolling:
+		int value = 0;
+		int i;
+		for(i = 0; i < N; i++)
+			value = value + vector[i] * scale;
+		return value;
+		
+		L5:
+			movl (esi, edx, 4), ecx
+			addl $1, edx
+			imul edi, ecx
+			addl ecx, eax
+			cmpl ebx, edx
+			jne L5
+			
+	Values in register depend on each other (ecx must be imul by edi before added into eax), which is bad for pipelining,
+	New Code, to help pipelining:
+		int value0 = 0;
+		int value1 = 0;
+		int i;
+		for(i = 0; i < N; i += 2)
+		{
+			value0 = value0 + vector[i] * scale;
+			value1 = value1 + vector[i] * scale;
+		}
+		return (value0 + value1);
+		
+		L5:
+			movl (esi, edx, 4), ecx
+			imul esi, edi
+			addl edi, ecx
+			movl 4(___), edi
+			addl $2, edi
+			imul esi, edi
+			addl edi, eax
+			cmpl ___, ___
+			jne L5
+
+Row-Major Order
+	Array
+	int	a[][] = [ 11	12 
+				  21	22 ]
+	
+	a[1][0] = 21
+				[0,0	0,1
+				 1,0	1,1]
+	Memory
+			[ 11 | 12 | 21 | 22 ]
+		  x=0	 4	  8	   12	16
+		100x = ^^^
+		a*(*(a+1)+0)
+		*(a+1) is dereferenced address of 1004, a is 11 (*a is 1000)
+		
+	Cache
+		Cache brings all these temp vars into itself, making var manipulation faster, but very expensive to have a large cache
+		Cache Miss = When a value/var isn't in the cache
+		
+		[11][12][  ][  ]
+		[  ][  ][  ][  ]
+		[  ][  ][  ][  ]s

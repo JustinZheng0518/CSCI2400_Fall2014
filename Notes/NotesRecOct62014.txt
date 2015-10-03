@@ -1,0 +1,48 @@
+Buffer Overflow
+	main()
+	...
+	test()
+	[---------------]
+	[				]<---main()
+	[---------------]	|	
+	[				]	|
+	[				]<--|
+	[				]	|
+	[---------------]	|
+	[ ret add		]<--/
+	[---------------]
+	[ 				]<---test()
+	[---------------]	|
+	[				]	|
+	[				]<--|
+	[				]	|
+	[				]	|
+	[				]	|
+	[---------------]	|
+	[ ret addr		]<--/
+	[ "98 8B 07 08" ]<---OVERFLOW
+	[---------------]
+	[ "41 42 43 44" ]<---getbuff()
+	[ ...			]
+	[ "01 02 03 04"	]
+
+	test():
+		pushl %ebp <--- Some Address: 0xFC...
+
+	gets("123456")
+	Slots: 0,1,2,3,4	
+	[1][2][3][4][5]--6...Overflow
+
+	Little Endian - Intel
+		String will be backwards
+		Byte ordering is reversed
+		ex: 08048B98 -> 08 04 8B 98 becomes 98 8b 04 08
+	
+	a[100] = *(a+100) ---> Memory addresses reserved are positive, meaning they go up (in the visual depiction)
+	
+	test()
+		getbuff() // char array
+			input "01 02 03 04 ... 44 ... 98 8B 04 08"
+			44 bytes, each is 1 byte
+		GOES ALL THE WAY TO 44
+

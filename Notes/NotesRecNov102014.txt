@@ -1,0 +1,35 @@
+Midterm Review
+	1)
+	int acc1, acc2;
+	for(__________)
+	{
+		acc1 = acc1 + data1[i];		// (1)
+		acc2 = acc2 * data2[i];		// (2)
+	}
+	
+	
+	 | |	[acc1] [acc2]	   | |
+	 v v	  |		  |		   v v
+	[load]	  v		  v		 [load]
+	    \-->[add ] [mult]<---/
+			  |		  |
+			  v		  v
+			[acc1] [acc2]
+		(1)					(2)
+		
+	? Float and other Pipelinable things (NOT on a critical path/Dependent): Issue Time / Through-Put Bound
+	? Else: Latency
+	
+	EX of crit path: When the registers can't hold enough variables. Like pointer ex, deref everything
+	
+	2)
+		xmm0 is not on the critical path because it gets reset to 0 at the beginning of the loop, but xmm1
+		depends on xmm0, and sums all of them up.
+		rdx depends	on rcx, within the comparsion, and is on the critical path because of that.
+		
+	4)
+	a>
+	exp:
+		-14 to 15
+		-15 = 00000
+		denorm) 11000 0000 - 256

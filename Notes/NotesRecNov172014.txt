@@ -1,0 +1,141 @@
+Exceptions
+DIAGRAM 1
+					Program				OS
+ [P]		|		|
+  ^			|		. Page Fault--------.
+  |			|							|Load Page, Return file descriptor
+[ OS ]		|		.-------------------.
+			|		|
+			|		|
+			v		v
+			Time
+			
+DIAGRAM 2
+					Process1	OS		Process2				Process3
+ [P]		|		|			 ^
+  ^			|		\------------|>-----\
+  |			|		Safari/				|	
+[ OS ]		|		Firefox				.
+			|							|	Finder/
+			|							|	Explorer
+			|
+			|
+			|
+			|
+			v
+			Time
+			
+	MEMORY
+	[	Stack	]}------|-P1
+	[	Heap	]	   	|
+	[	Data	]		|
+	[	Code	]}------|
+	[
+	
+				]
+	[	S		]}------|-P2
+	[	H		]		|
+	[	D		]		|
+	[	C		]}------|
+	
+DIAGRAM 3
+					Process1			Process2				Process3
+ [P]		|		|		
+  ^			|  		|
+  |			-						
+[ OS ]		|								|				
+			|								|						
+			-
+			|														|
+			|														|
+			-
+			|		|
+			|		|
+			v
+			Time
+			
+DIAGRAM 4
+	[*]int pid = fork();
+	[-]if(pid == )
+		printf("child process");
+	else
+		printf("parent process");
+
+		P				CP
+|		.		
+|  		|
+|	[*]	|---------------. [-]			
+|						|
+|		_				|
+|		| [-]
+|		|
+|						|
+|						. exit(0)
+|		|
+|		. exit(0)
+v		v
+Time
+
+	MEMORY
+	[Stack pid=2]}------|-P1
+	[	Heap	]	   	|
+	[	Data	]		|
+	[	Code	]}------|
+	[
+	
+				]
+	[S  pid = 0	]}------|-CP
+	[	H		]		|
+	[	D		]		|
+	[	C		]}------|
+	
+	Zombie Process, if a process remains and is still in memory heap, even though is was suppose to be cleaned up.
+	
+DIAGRAM 5
+_> ls &
+ >
+		terminal		ls
+|		.		
+|  		|
+|		\---------------\			
+|						|
+|		/---------------/
+|		| 
+|		|
+|		|				
+|		|				
+|		|
+|		|
+v		v
+Time
+
+DIAGRAM
+	void handler(___){
+		// Clean up
+		exit(0);
+	}
+	
+	int main(int argc, char * argv[]){
+	...
+		signal(SIGINT< &handler);
+		while(1){
+		// pause
+		// eval 	- fork
+					
+		}
+		
+		CP - Child Processes
+		shell			CP2			CP1
+|		.		
+|  		|
+|		|---------------\			
+|		|				|
+|		|				|
+|		| 				|		  
+|		|
+|		|---------------------------\				
+|		|							|
+|		|						  	|
+|		|
+v		v
+Time

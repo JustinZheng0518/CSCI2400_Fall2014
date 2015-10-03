@@ -1,0 +1,20 @@
+gdb bomb
+break 74
+run
+stepi
+disassemble
+--> <+20> call <strings_not_equal>
+stepi 6
+--> in front of <strings not equal>
+stepi
+--> in <strings_not_equal>
+disassemble
+--> inspect calls, maybe? cmp? A good starting point is seeing <strings_not_equal> in the function. Find the string!
+Inforeg
+--> Shows registers
+step
+--> skips functions, goes to next call
+stepi
+--> steps inside
+quit
+y

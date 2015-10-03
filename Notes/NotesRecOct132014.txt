@@ -1,0 +1,68 @@
+Floating Point
+	Decimal Base 10:	num = d_m * d_(m-1) ... d_0 * d_(-1) ... d_(-n)
+						num = Sum(i = -n, m) d_i * 10^i
+						d_(-1) = 2 --> 2*10^(-1) = 0.2
+						
+			Base 2:			  2^m * 2^(m-1) ... 2^0 * 2^(-1) * 2^(-2) ... 2^(-n)
+						num = b_m * b_(m-1) ... b_0 * b_(-1) * b_(-2) ... b(-n)
+						num = Sum(i = -n, m) b_i * 2^i
+						ex: 1.2 * 10^100
+							1.23451012987 * 10^100
+							Assume that you have a leading 1
+	
+	IEEE Format
+		Floating point (8-bits)
+			[ Sign-bit | Exponent			| Fraction			]
+			7	S	   6	Exp			 3,	2	Frac			0
+		
+			Ex: 1.01110100110110111 <-- Base 2
+			num = (-1)^S * M * 2^E
+				M denotes implied 1 with all the fractions
+				
+			|-------------------|-|-------------------|
+			-Infinity			 0			   Infinity
+			
+			+/- Denormalized (Leading Zero)
+			+/- Normalized (Leading non-zero 1)
+	
+			In case of 4:
+				0000 ... 1111
+				0000 = All zeros = Denormal case
+				1111 = All ones = +/- Infinity case
+				
+				Exp		exp		E		2^E
+				0		0000 	-6		1/64
+				1		0001	-6		1/64
+				...
+				4		0100	-
+				...
+				7		0111	0		1
+				...
+				14		1110	+7		128
+				15		1111	[No Meanings]
+			
+				4	<-- 4 vall by exp
+				7	<-- Exo that represents zero
+				--
+				11	<-- Real Val
+				
+		ex: 1.011 * 2^4 <--- Base 2, 4th place is 0
+			1011	->	[ 0 | 1011 | 011 ]
+						Sign, Exp, Fraction
+									 1/2 1/4 1/8 < -- Max Precision is 1/8, all vall that are 1/16 and past are lost
+		
+		Single Precision
+			  1		8		   23
+			[   |		|				]
+			
+			(float a = 15213.0)
+			15213.0, base 10
+			= 11101101101101, base 2
+			Have a leading one! Sci Not Form
+			= 1.1101101101101 * 2^13
+			
+			13 + 127 = 140
+						||				13 digits, fill the 10 remaining with 0s
+						||				||
+						\/				\/
+			[ 0 | 10001100 | 11011011011010000000000 ]
